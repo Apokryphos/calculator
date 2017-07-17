@@ -1,0 +1,237 @@
+@import "https://fonts.googleapis.com/css?family=Orbitron";
+
+$calc-depth: 48px;
+$calc-shadow-depth: 12px;
+
+$btn-depth: 16px;
+$btn-hover-depth: 14px;
+$btn-active-depth: 2px;
+$btn-press-depth: 4px;
+$btn-shadow-depth: 2px;
+
+$color-page: #333;
+
+$color-calc: #27303f;
+$color-calc-lo: #11151b;
+$color-calc-hi: #3d4a62;
+//  This is also the shadow color the buttons cast on the calculator.
+$color-calc-shadow: #0f1217;
+
+//  Shadow color the calculator casts on the page.
+$color-calc-page-shadow: #222;
+
+$color-btn-calc-shadow: #0f1217;
+
+$color-btn-digit: #9ea3b0;
+$color-btn-digit-hi: #c1c4cc;
+$color-btn-digit-lo: #6d6f80;
+$color-btn-digit-shadow: #505165;
+
+$color-btn-op: #2F99DA;
+$color-btn-op-hi: #70baf3;
+$color-btn-op-lo: #3693da;
+$color-btn-op-shadow: #202b4c;
+
+@function BtnBoxShadow($shadow-color, $depth: $btn-depth) {
+  @return
+    0 $depth 0 $shadow-color,
+    0 $depth + $btn-shadow-depth 0 $color-calc-shadow,
+    $btn-shadow-depth 0 0 $color-calc-shadow,
+    $btn-shadow-depth $depth + $btn-shadow-depth 0 $color-calc-shadow;
+}
+
+html {
+  background-color: $color-page;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+}
+
+a, a:active, a:visited {
+  color: $color-btn-op;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#CalculatorHistory {
+  font-size: 1em;
+}
+
+.glow {
+  color: #D23B38;
+  font-size: 3em;
+  text-shadow:
+    0 0 10px #c10900,
+    0 0 2px #DD6677;
+}
+
+.calculator {
+  background:
+    linear-gradient(to bottom right, $color-calc-hi, transparent),
+    linear-gradient(to top left, $color-calc-lo, transparent);
+
+  background-color: $color-calc;
+
+  border-top: 4px solid $color-calc-hi;
+  border-left: 4px solid $color-calc-hi;
+  border-right: 4px solid $color-calc-lo;
+  border-bottom: 4px solid $color-calc-lo;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 $calc-depth 0 $color-calc-shadow,
+    0 $calc-depth+$calc-shadow-depth 0 $color-calc-page-shadow,
+    $calc-shadow-depth 0 0 $color-calc-page-shadow,
+    $calc-shadow-depth $calc-depth+$calc-shadow-depth 0 $color-calc-page-shadow;
+
+  display: inline-block;
+  margin: 5em;
+}
+
+.calc-grid {
+  display: grid;
+  grid-gap: 2em 0;
+  grid-template-columns: repeat(10, 2.5em);
+  grid-template-rows: 1fr 0 repeat(4, 0.5fr);
+  padding: 2em;
+}
+
+.screen {
+  background-color: #1b1313;
+  border-radius: 5px;
+
+  border-top: 4px solid $color-calc-shadow;
+  border-left: 4px solid $color-calc-shadow;
+  border-right: 4px solid $color-calc-hi;
+  border-bottom: 4px solid $color-calc-hi;
+
+  box-shadow:
+    inset 0px 0px 5px rgba(0,0,0,0.5),
+    inset 0px 0px 50px rgba(59,19,19,1);
+
+  font-family: 'Orbitron', sans-serif;
+  grid-column-start: span 10;
+  overflow: hidden;
+  padding: 1em;
+  text-align: right;
+  text-overflow: clip;
+}
+
+.btn-chs {
+  grid-column: 6;
+}
+
+.btn-clx {
+  grid-column: 8;
+}
+
+.btn-clr {
+  grid-column: 10;
+}
+
+.col-enter {
+  grid-column: span 4 / 5;
+}
+
+.col-op {
+  grid-column: 1;
+}
+
+.col-digit-1 {
+  grid-column: span 2 / 5;
+}
+
+.col-digit-2 {
+  grid-column: span 2 / 8;
+}
+
+.col-digit-3 {
+  grid-column: span 2 / 11;
+}
+
+.btn {
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.8rem;
+  height: 1.2em;
+  text-align: center;
+
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.btn-digit {
+  background:
+    linear-gradient(to bottom right, $color-btn-digit-hi, transparent),
+    linear-gradient(to top left, $color-btn-digit-lo, transparent);
+
+  background-color: $color-btn-digit;
+
+  border-top: 2px solid $color-btn-digit-hi;
+  border-left: 2px solid $color-btn-digit-hi;
+  border-right: 2px solid $color-btn-digit-lo;
+  border-bottom: 2px solid $color-btn-digit-lo;
+
+  box-shadow:
+    BtnBoxShadow($color-btn-digit-shadow);
+
+  color: #181510;
+}
+
+.btn-op {
+
+  background:
+    linear-gradient(to bottom right, $color-btn-op-hi, transparent),
+    linear-gradient(to top left, $color-btn-op-lo, transparent);
+
+  background-color: $color-btn-op;
+
+  border-top: 2px solid $color-btn-op-hi;
+  border-left: 2px solid $color-btn-op-hi;
+  border-right: 2px solid $color-btn-op-lo;
+  border-bottom: 2px solid $color-btn-op-lo;
+
+  box-shadow:
+    BtnBoxShadow($color-btn-op-shadow);
+
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY($btn-depth - $btn-hover-depth);
+}
+
+.btn-op:hover {
+  box-shadow: BtnBoxShadow($color-btn-op-shadow, $btn-hover-depth);
+}
+
+.btn-digit:hover {
+  box-shadow: BtnBoxShadow($color-btn-digit-shadow, $btn-hover-depth);
+}
+
+.label {
+  color: #DDD;
+  font-size: 1rem;
+}
+
+.btn:active {
+  transform: translateY($btn-depth - $btn-active-depth);
+}
+
+.btn-op:active {
+  box-shadow: BtnBoxShadow($color-btn-op-shadow, $btn-active-depth);
+}
+
+.btn-digit:active {
+  box-shadow: BtnBoxShadow($color-btn-digit-shadow, $btn-active-depth);
+}
