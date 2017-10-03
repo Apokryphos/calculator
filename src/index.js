@@ -1,3 +1,6 @@
+const MAX_SCREEN_DISPLAY_CHARACTERS = 9;
+const MAX_SCREEN_HISTORY_CHARACTERS = 20;
+
 const CalcOp = {
   ADD: 1,
   SUB: 2,
@@ -283,14 +286,19 @@ function handleInput(event) {
   updateCalculatorDisplay(calculator);
 }
 
+let calculatorDisplayElement = null;
+let calculatorHistoryElement = null;
 function updateCalculatorDisplay(calc) {
-  document.getElementById('CalculatorDisplay').innerHTML = calc.getDisplay();
-  document.getElementById('CalculatorHistory').innerHTML = calc.getHistory();
+  calculatorDisplayElement.innerHTML = calc.getDisplay().substring(0, MAX_SCREEN_DISPLAY_CHARACTERS);
+  calculatorHistoryElement.innerHTML = calc.getHistory().substring(0, MAX_SCREEN_HISTORY_CHARACTERS);
 }
 
 const calculator = new Calculator();
 
 function init() {
+
+  calculatorDisplayElement = document.getElementById('calculator-display');
+  calculatorHistoryElement = document.getElementById('calculator-history');
 
   document.getElementById('digit1').addEventListener('click', function() {
     calculator.enterDigit('1');
