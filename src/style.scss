@@ -1,4 +1,4 @@
-@import "https://fonts.googleapis.com/css?family=Orbitron";
+@import 'https://fonts.googleapis.com/css?family=Orbitron';
 
 $calc-depth: 48px;
 $calc-shadow-depth: 12px;
@@ -27,14 +27,40 @@ $color-btn-digit-hi: #c1c4cc;
 $color-btn-digit-lo: #6d6f80;
 $color-btn-digit-shadow: #505165;
 
-$color-btn-op: #2F99DA;
+$color-btn-op: #2f99da;
 $color-btn-op-hi: #70baf3;
 $color-btn-op-lo: #3693da;
 $color-btn-op-shadow: #202b4c;
 
+$grid-row-gap: 2em;
+$grid-row-size: 0.5fr;
+
+$grid-column-gap: 0;
+$grid-column-size: 2.5em;
+
+@mixin GridColumn($start, $span: 1) {
+  grid-column: #{$start} / #{$start + $span};
+  //  IE treats gaps as columns
+  -ms-grid-column: #{$start + ($start - 1)};
+  -ms-grid-column-span: $span * 2;
+}
+
+@mixin GridRow($start, $span: 1) {
+  grid-row: #{$start} / #{$start + $span};
+
+  //  Adjust for zero gap row (above CHS/CSX/CLR labels) since IE
+  //  treats gaps as rows
+  @if $start > 2 {
+    -ms-grid-row: #{$start + ($start - 1) - 1};
+  } @else {
+    -ms-grid-row: #{$start + ($start - 1)};
+  }
+
+  -ms-grid-row-span: $span;
+}
+
 @function BtnBoxShadow($shadow-color, $depth: $btn-depth) {
-  @return
-    0 $depth 0 $shadow-color,
+  @return 0 $depth 0 $shadow-color,
     0 $depth + $btn-shadow-depth 0 $color-calc-shadow,
     $btn-shadow-depth 0 0 $color-calc-shadow,
     $btn-shadow-depth $depth + $btn-shadow-depth 0 $color-calc-shadow;
@@ -54,7 +80,9 @@ body {
   text-align: center;
 }
 
-a, a:active, a:visited {
+a,
+a:active,
+a:visited {
   color: $color-btn-op;
   text-decoration: none;
 }
@@ -68,16 +96,13 @@ a:hover {
 }
 
 .glow {
-  color: #D23B38;
+  color: #d23b38;
   font-size: 3em;
-  text-shadow:
-    0 0 10px #c10900,
-    0 0 2px #DD6677;
+  text-shadow: 0 0 10px #c10900, 0 0 2px #dd6677;
 }
 
 .calculator {
-  background:
-    linear-gradient(to bottom right, $color-calc-hi, transparent),
+  background: linear-gradient(to bottom right, $color-calc-hi, transparent),
     linear-gradient(to top left, $color-calc-lo, transparent);
 
   background-color: $color-calc;
@@ -89,8 +114,7 @@ a:hover {
 
   border-radius: 16px;
 
-  box-shadow:
-    0 $calc-depth 0 $color-calc-shadow,
+  box-shadow: 0 $calc-depth 0 $color-calc-shadow,
     0 $calc-depth+$calc-shadow-depth 0 $color-calc-page-shadow,
     $calc-shadow-depth 0 0 $color-calc-page-shadow,
     $calc-shadow-depth $calc-depth+$calc-shadow-depth 0 $color-calc-page-shadow;
@@ -101,9 +125,21 @@ a:hover {
 
 .calc-grid {
   display: grid;
-  grid-gap: 2em 0;
-  grid-template-columns: repeat(10, 2.5em);
-  grid-template-rows: 1fr 0 repeat(4, 0.5fr);
+  display: -ms-grid;
+  grid-gap: $grid-row-gap $grid-column-gap;
+  grid-template-columns: repeat(10, $grid-column-size);
+  grid-template-rows: 1fr 0 repeat(5, $grid-row-size);
+
+  -ms-grid-columns: $grid-column-size $grid-column-gap $grid-column-size
+    $grid-column-gap $grid-column-size $grid-column-gap $grid-column-size
+    $grid-column-gap $grid-column-size $grid-column-gap $grid-column-size
+    $grid-column-gap $grid-column-size $grid-column-gap $grid-column-size
+    $grid-column-gap $grid-column-size $grid-column-gap $grid-column-size;
+
+  -ms-grid-rows: 1fr $grid-row-gap $grid-row-gap $grid-row-size $grid-row-gap
+    $grid-row-size $grid-row-gap $grid-row-size $grid-row-gap $grid-row-size
+    $grid-row-gap $grid-row-size;
+
   padding: 2em;
 }
 
@@ -116,48 +152,72 @@ a:hover {
   border-right: 4px solid $color-calc-hi;
   border-bottom: 4px solid $color-calc-hi;
 
-  box-shadow:
-    inset 0px 0px 5px rgba(0,0,0,0.5),
-    inset 0px 0px 50px rgba(59,19,19,1);
+  box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.5),
+    inset 0px 0px 50px rgba(59, 19, 19, 1);
 
   font-family: 'Orbitron', sans-serif;
-  grid-column-start: span 10;
   overflow: hidden;
   padding: 1em;
   text-align: right;
   text-overflow: clip;
+
+  @include GridColumn(1, 10);
 }
 
 .btn-chs {
-  grid-column: 6;
+  @include GridColumn(6);
 }
 
 .btn-clx {
-  grid-column: 8;
+  @include GridColumn(8);
 }
 
 .btn-clr {
-  grid-column: 10;
+  @include GridColumn(10);
 }
 
 .col-enter {
-  grid-column: span 4 / 5;
+  @include GridColumn(1, 4);
 }
 
 .col-op {
-  grid-column: 1;
+  @include GridColumn(1);
 }
 
 .col-digit-1 {
-  grid-column: span 2 / 5;
+  @include GridColumn(3, 2);
 }
 
 .col-digit-2 {
-  grid-column: span 2 / 8;
+  @include GridColumn(6, 2);
 }
 
 .col-digit-3 {
-  grid-column: span 2 / 11;
+  @include GridColumn(9, 2);
+}
+
+.row-label {
+  @include GridRow(2);
+}
+
+.row-op {
+  @include GridRow(3);
+}
+
+.row-digit-1 {
+  @include GridRow(4);
+}
+
+.row-digit-2 {
+  @include GridRow(5);
+}
+
+.row-digit-3 {
+  @include GridRow(6);
+}
+
+.row-digit-4 {
+  @include GridRow(7);
 }
 
 .btn {
@@ -171,8 +231,11 @@ a:hover {
 }
 
 .btn-digit {
-  background:
-    linear-gradient(to bottom right, $color-btn-digit-hi, transparent),
+  background: linear-gradient(
+      to bottom right,
+      $color-btn-digit-hi,
+      transparent
+    ),
     linear-gradient(to top left, $color-btn-digit-lo, transparent);
 
   background-color: $color-btn-digit;
@@ -182,16 +245,13 @@ a:hover {
   border-right: 2px solid $color-btn-digit-lo;
   border-bottom: 2px solid $color-btn-digit-lo;
 
-  box-shadow:
-    BtnBoxShadow($color-btn-digit-shadow);
+  box-shadow: BtnBoxShadow($color-btn-digit-shadow);
 
   color: #181510;
 }
 
 .btn-op {
-
-  background:
-    linear-gradient(to bottom right, $color-btn-op-hi, transparent),
+  background: linear-gradient(to bottom right, $color-btn-op-hi, transparent),
     linear-gradient(to top left, $color-btn-op-lo, transparent);
 
   background-color: $color-btn-op;
@@ -201,8 +261,7 @@ a:hover {
   border-right: 2px solid $color-btn-op-lo;
   border-bottom: 2px solid $color-btn-op-lo;
 
-  box-shadow:
-    BtnBoxShadow($color-btn-op-shadow);
+  box-shadow: BtnBoxShadow($color-btn-op-shadow);
 
   color: white;
 }
@@ -220,7 +279,7 @@ a:hover {
 }
 
 .label {
-  color: #DDD;
+  color: #ddd;
   font-size: 1rem;
 }
 
